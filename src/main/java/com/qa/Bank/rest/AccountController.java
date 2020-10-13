@@ -65,4 +65,9 @@ public class AccountController {
 																													// /?id=
 		return new ResponseEntity<>(this.service.updateAccount(account, id), HttpStatus.ACCEPTED);
 	}
+
+	@PostMapping("/login/{acc}")
+	public ResponseEntity<AccountDTO> login(@PathVariable("acc") int acc, @RequestBody String pw) {
+		return new ResponseEntity<>(this.service.login(acc, pw), HttpStatus.ACCEPTED);
+	}
 }

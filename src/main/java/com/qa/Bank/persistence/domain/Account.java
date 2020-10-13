@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
@@ -18,7 +19,7 @@ import org.hibernate.annotations.OnDeleteAction;
 public class Account {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "account")
@@ -29,18 +30,25 @@ public class Account {
 		super();
 	}
 
-	public Account(int accountNumber, String firstName, String lastName, Long balance) {
+	public Account(int accountNumber, String firstName, String lastName, Long balance, String pass) {
 		super();
 		this.accountNumber = accountNumber;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.balance = balance;
+		this.pass = pass;
 
 	}
 
 	@Column(name = "account_number")
 	@NotNull
 	private int accountNumber;
+
+	@Override
+	public String toString() {
+		return "Account [id=" + id + ", payments=" + payments + ", accountNumber=" + accountNumber + ", firstName="
+				+ firstName + ", lastName=" + lastName + ", balance=" + balance + ", pass=" + pass + "]";
+	}
 
 	@NotNull
 	@Column(name = "first_name")

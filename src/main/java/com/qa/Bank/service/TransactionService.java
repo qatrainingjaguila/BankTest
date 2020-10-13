@@ -1,12 +1,15 @@
 package com.qa.Bank.service;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qa.Bank.dto.AccountDTO;
 import com.qa.Bank.dto.PaymentDTO;
 import com.qa.Bank.exceptions.AccountNotFoundException;
@@ -25,6 +28,8 @@ public class TransactionService {
 
 	private ModelMapper mapper;
 
+	private ObjectMapper objmapper;
+
 	private static int newAccountNumber = 1000;
 
 	private static void newAccountNo(Account account) {
@@ -35,10 +40,13 @@ public class TransactionService {
 	}
 
 	@Autowired
-	public TransactionService(PaymentRepo paymentRepo, AccountRepo accountRepo, ModelMapper mapper) {
+	public TransactionService(PaymentRepo paymentRepo, AccountRepo accountRepo, ModelMapper mapper,
+			ObjectMapper objmapper) {
 		this.paymentRepo = paymentRepo;
 		this.accountRepo = accountRepo;
 		this.mapper = mapper;
+		this.objmapper = objmapper;
+		;
 	}
 
 	private AccountDTO mapToDTO(Account account) { // takes an account and maps to a dto obj
@@ -129,6 +137,34 @@ public class TransactionService {
 	public PaymentDTO updatePayment(PaymentDTO payment, Long id) {
 		Payment toUpdate = this.paymentRepo.findById(id).orElseThrow(RuntimeException::new);
 		return this.mapToDTO(this.paymentRepo.save(toUpdate));
+	}
+
+	public AccountDTO login(int accountNumber, String pw) {
+		try {
+			Map<String, String> pass = objmapper.readValue(pw, Map.class);
+			System.out.println(pass);
+			System.out.println(accountNumber);
+			List<Account> accounts = this.accountRepo.findAccountByAccountNumber(accountNumber);
+			System.out.println(accounts);
+			System.out.println(pass);
+			if (accounts.size() == 1) {
+				Account toCheck = accounts.get(0); // this.accountRepo.findAccountByAccountNumber(accountNumber);
+				System.out.println(toCheck);
+				System.out.println(toCheck.getPass());
+				System.out.println("answer = " + pass.get("pass").contentEquals(toCheck.getPass()));
+				if (pass.get("pass").equals(toCheck.getPass())) {
+					System.out.println("pass checked");
+					return this.mapToDTO(toCheck);
+				} else {
+					throw new RuntimeException();
+				}
+			} else {
+				throw new RuntimeException();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		throw new RuntimeException();
 	}
 
 }
