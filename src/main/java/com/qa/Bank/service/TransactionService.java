@@ -135,6 +135,9 @@ public class TransactionService {
 	}
 
 	public PaymentDTO updatePayment(PaymentDTO payment, Long id) {
+		// FOR MOCKITO:
+		// Optional<Payment> optPayment = this.repo.findById(id);
+		// Payment oldpayment = optPayment.orElseThrow()....
 		Payment toUpdate = this.paymentRepo.findById(id).orElseThrow(RuntimeException::new);
 		return this.mapToDTO(this.paymentRepo.save(toUpdate));
 	}
