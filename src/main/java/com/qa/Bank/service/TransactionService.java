@@ -19,6 +19,7 @@ import com.qa.Bank.persistence.repo.AccountRepo;
 import com.qa.Bank.persistence.repo.PaymentRepo;
 import com.qa.Bank.utils.MyBeanUtils;
 
+//dev test
 @Service
 public class TransactionService {
 
@@ -106,6 +107,8 @@ public class TransactionService {
 
 	public PaymentDTO createPayment(PaymentDTO payment) {
 		Payment toSave = this.mapFromDTO(payment);
+		// List<Account> accounts =
+		// this.accountRepo.findAccountByAccountNumber(toSave.getUserId());
 		Account payerNewBalance = this.accountRepo.findById(toSave.getUserId())
 				.orElseThrow(AccountNotFoundException::new);
 		payerNewBalance.setBalance(payerNewBalance.getBalance() - payment.getAmount());
@@ -145,18 +148,25 @@ public class TransactionService {
 	public AccountDTO login(int accountNumber, String pw) {
 		try {
 			Map<String, String> pass = objmapper.readValue(pw, Map.class);
+
 			System.out.println(pass);
 			System.out.println(accountNumber);
+
 			List<Account> accounts = this.accountRepo.findAccountByAccountNumber(accountNumber);
+
 			System.out.println(accounts);
-			System.out.println(pass);
+
 			if (accounts.size() == 1) {
 				Account toCheck = accounts.get(0); // this.accountRepo.findAccountByAccountNumber(accountNumber);
+
 				System.out.println(toCheck);
 				System.out.println(toCheck.getPass());
 				System.out.println("answer = " + pass.get("pass").contentEquals(toCheck.getPass()));
+
 				if (pass.get("pass").equals(toCheck.getPass())) {
+
 					System.out.println("pass checked");
+
 					return this.mapToDTO(toCheck);
 				} else {
 					throw new RuntimeException();
