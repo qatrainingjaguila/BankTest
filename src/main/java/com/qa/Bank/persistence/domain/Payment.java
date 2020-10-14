@@ -23,25 +23,17 @@ public class Payment {
 
 	@Column
 	@NotNull
-	private Long recipientId;
-
-	public Long getRecipientId() {
-		return recipientId;
-	}
-
-	public void setRecipientId(Long recipientId) {
-		this.recipientId = recipientId;
-	}
+	private int recipientId;
 
 	@Column
 	private Long userId;
 
-	public Long getUserId() {
-		return userId;
+	public int getRecipientId() {
+		return recipientId;
 	}
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setRecipientId(int recipientId) {
+		this.recipientId = recipientId;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY) // Doesn't fetch data until an explicit call is made
@@ -56,6 +48,22 @@ public class Payment {
 
 	public Long getPaymentId() {
 		return paymentId;
+	}
+
+	public Payment(Long paymentId, @NotNull Long amount, @NotNull int recipientId, Long userId) {
+		super();
+		this.paymentId = paymentId;
+		this.amount = amount;
+		this.recipientId = recipientId;
+		this.userId = userId;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 	public void setPaymentId(Long paymentId) {

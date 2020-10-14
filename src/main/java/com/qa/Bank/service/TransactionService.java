@@ -106,15 +106,14 @@ public class TransactionService {
 	}
 
 	public PaymentDTO createPayment(PaymentDTO payment) {
+
 		Payment toSave = this.mapFromDTO(payment);
-		// List<Account> accounts =
-		// this.accountRepo.findAccountByAccountNumber(toSave.getUserId());
-		Account payerNewBalance = this.accountRepo.findById(toSave.getUserId())
-				.orElseThrow(AccountNotFoundException::new);
+
+		Account payerNewBalance = this.accountRepo.findById(toSave.getUserId()).orElseThrow(RuntimeException::new);
 		payerNewBalance.setBalance(payerNewBalance.getBalance() - payment.getAmount());
 
-		Account payeeNewBalance = this.accountRepo.findById(toSave.getRecipientId())
-				.orElseThrow(AccountNotFoundException::new);
+		List<Account> payeeAccounts = this.accountRepo.findAccountByAccountNumber(toSave.getRecipientId());
+		Account payeeNewBalance = payeeAccounts.get(0);
 		payeeNewBalance.setBalance(payeeNewBalance.getBalance() + payment.getAmount());
 		Payment saved = this.paymentRepo.save(toSave);
 
