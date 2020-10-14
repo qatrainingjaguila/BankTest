@@ -50,9 +50,8 @@ public class Payment {
 		return paymentId;
 	}
 
-	public Payment(Long paymentId, @NotNull Long amount, @NotNull int recipientId, Long userId) {
+	public Payment(@NotNull Long amount, @NotNull int recipientId, Long userId) {
 		super();
-		this.paymentId = paymentId;
 		this.amount = amount;
 		this.recipientId = recipientId;
 		this.userId = userId;

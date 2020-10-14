@@ -30,9 +30,8 @@ public class Account {
 		super();
 	}
 
-	public Account(int accountNumber, String firstName, String lastName, Long balance, String pass) {
+	public Account(String firstName, String lastName, Long balance, String pass) {
 		super();
-		this.accountNumber = accountNumber;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.balance = balance;
