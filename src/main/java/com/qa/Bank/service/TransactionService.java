@@ -84,6 +84,9 @@ public class TransactionService {
 		// a data structure.
 
 	public AccountDTO updateAccount(AccountDTO account, Long id) { // returns account dto
+		// FOR MOCKITO:
+		// Optional<Account> optAccount = this.repo.findById(id);
+		// Payment optAccount = optAccount.orElseThrow()....
 		Account toUpdate = this.accountRepo.findById(id).orElseThrow(AccountNotFoundException::new); // creating new
 																										// Account
 		// obj by finding the id
@@ -120,13 +123,11 @@ public class TransactionService {
 		return this.mapToDTO(saved);
 	}
 
-	public boolean deletePayment(Long id) {
-		if (!this.paymentRepo.existsById(id)) {
-			throw new RuntimeException();
-		}
-		this.paymentRepo.deleteById(id);
-		return !this.paymentRepo.existsById(id);
-	}
+	/*
+	 * public boolean deletePayment(Long id) { if (!this.paymentRepo.existsById(id))
+	 * { throw new RuntimeException(); } this.paymentRepo.deleteById(id); return
+	 * !this.paymentRepo.existsById(id); }
+	 */
 
 	public PaymentDTO findPaymentByID(Long id) {
 		return this.mapToDTO(this.paymentRepo.findById(id).orElseThrow(RuntimeException::new));
@@ -136,13 +137,13 @@ public class TransactionService {
 		return this.paymentRepo.findAll().stream().map(this::mapToDTO).collect(Collectors.toList());
 	}
 
-	public PaymentDTO updatePayment(PaymentDTO payment, Long id) {
-		// FOR MOCKITO:
-		// Optional<Payment> optPayment = this.repo.findById(id);
-		// Payment oldpayment = optPayment.orElseThrow()....
-		Payment toUpdate = this.paymentRepo.findById(id).orElseThrow(RuntimeException::new);
-		return this.mapToDTO(this.paymentRepo.save(toUpdate));
-	}
+	/*
+	 * public PaymentDTO updatePayment(PaymentDTO payment, Long id) {
+	 * 
+	 * Payment toUpdate =
+	 * this.paymentRepo.findById(id).orElseThrow(RuntimeException::new); return
+	 * this.mapToDTO(this.paymentRepo.save(toUpdate)); }
+	 */
 
 	public AccountDTO login(int accountNumber, String pw) {
 		try {

@@ -73,11 +73,6 @@ public class Payment {
 		return amount;
 	}
 
-	public Payment(@NotNull Long amount) {
-		super();
-		this.amount = amount;
-	}
-
 	public void setAmount(Long amount) {
 		this.amount = amount;
 	}

@@ -1,8 +1,10 @@
 package com.qa.Bank;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
@@ -72,6 +74,19 @@ public class BankIntegrationTest {
 		ResultMatcher checkStatus = status().isAccepted();
 		RequestBuilder req = put("/account/updateAccount/?id=1").contentType(MediaType.APPLICATION_JSON).content(body);
 		MvcResult result = this.mockMVC.perform(req).andExpect(checkStatus).andReturn();
+	}
+
+	@Test
+	void testReadAccount() throws Exception {
+		Account newAccount = new Account("John", "Smith", 100L, "pass123");
+		String body = this.mapper.writeValueAsString(newAccount);
+		RequestBuilder req = post("/account/createAccount").contentType(MediaType.APPLICATION_JSON).content(body);
+		MvcResult result = this.mockMVC.perform(req).andReturn();
+		String reqBody = result.getResponse().getContentAsString();
+		Account accountResult = this.mapper.readValue(reqBody, Account.class);
+
+		String responseBody = this.mapper.writeValueAsString(accountResult);
+		this.mockMVC.perform(get("/account/get/3")).andExpect(status().isOk()).andExpect(content().json(responseBody));
 	}
 
 }
