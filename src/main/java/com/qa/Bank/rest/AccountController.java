@@ -56,7 +56,7 @@ public class AccountController {
 	}
 
 	@GetMapping("/getAll")
-	public ResponseEntity<List<AccountDTO>> getAllDucks() {
+	public ResponseEntity<List<AccountDTO>> getAllAccounts() {
 		return ResponseEntity.ok(this.service.readAccounts());
 	}
 
