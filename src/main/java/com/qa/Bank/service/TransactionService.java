@@ -19,6 +19,7 @@ import com.qa.Bank.persistence.repo.AccountRepo;
 import com.qa.Bank.persistence.repo.PaymentRepo;
 import com.qa.Bank.utils.MyBeanUtils;
 
+//dev test
 @Service
 public class TransactionService {
 
@@ -83,6 +84,9 @@ public class TransactionService {
 		// a data structure.
 
 	public AccountDTO updateAccount(AccountDTO account, Long id) { // returns account dto
+		// FOR MOCKITO:
+		// Optional<Account> optAccount = this.repo.findById(id);
+		// Payment optAccount = optAccount.orElseThrow()....
 		Account toUpdate = this.accountRepo.findById(id).orElseThrow(AccountNotFoundException::new); // creating new
 																										// Account
 		// obj by finding the id
@@ -105,26 +109,25 @@ public class TransactionService {
 	}
 
 	public PaymentDTO createPayment(PaymentDTO payment) {
+
 		Payment toSave = this.mapFromDTO(payment);
-		Account payerNewBalance = this.accountRepo.findById(toSave.getUserId())
-				.orElseThrow(AccountNotFoundException::new);
+
+		Account payerNewBalance = this.accountRepo.findById(toSave.getUserId()).orElseThrow(RuntimeException::new);
 		payerNewBalance.setBalance(payerNewBalance.getBalance() - payment.getAmount());
 
-		Account payeeNewBalance = this.accountRepo.findById(toSave.getRecipientId())
-				.orElseThrow(AccountNotFoundException::new);
+		List<Account> payeeAccounts = this.accountRepo.findAccountByAccountNumber(toSave.getRecipientId());
+		Account payeeNewBalance = payeeAccounts.get(0);
 		payeeNewBalance.setBalance(payeeNewBalance.getBalance() + payment.getAmount());
 		Payment saved = this.paymentRepo.save(toSave);
 
 		return this.mapToDTO(saved);
 	}
 
-	public boolean deletePayment(Long id) {
-		if (!this.paymentRepo.existsById(id)) {
-			throw new RuntimeException();
-		}
-		this.paymentRepo.deleteById(id);
-		return !this.paymentRepo.existsById(id);
-	}
+	/*
+	 * public boolean deletePayment(Long id) { if (!this.paymentRepo.existsById(id))
+	 * { throw new RuntimeException(); } this.paymentRepo.deleteById(id); return
+	 * !this.paymentRepo.existsById(id); }
+	 */
 
 	public PaymentDTO findPaymentByID(Long id) {
 		return this.mapToDTO(this.paymentRepo.findById(id).orElseThrow(RuntimeException::new));
@@ -134,29 +137,36 @@ public class TransactionService {
 		return this.paymentRepo.findAll().stream().map(this::mapToDTO).collect(Collectors.toList());
 	}
 
-	public PaymentDTO updatePayment(PaymentDTO payment, Long id) {
-		// FOR MOCKITO:
-		// Optional<Payment> optPayment = this.repo.findById(id);
-		// Payment oldpayment = optPayment.orElseThrow()....
-		Payment toUpdate = this.paymentRepo.findById(id).orElseThrow(RuntimeException::new);
-		return this.mapToDTO(this.paymentRepo.save(toUpdate));
-	}
+	/*
+	 * public PaymentDTO updatePayment(PaymentDTO payment, Long id) {
+	 * 
+	 * Payment toUpdate =
+	 * this.paymentRepo.findById(id).orElseThrow(RuntimeException::new); return
+	 * this.mapToDTO(this.paymentRepo.save(toUpdate)); }
+	 */
 
 	public AccountDTO login(int accountNumber, String pw) {
 		try {
 			Map<String, String> pass = objmapper.readValue(pw, Map.class);
+
 			System.out.println(pass);
 			System.out.println(accountNumber);
+
 			List<Account> accounts = this.accountRepo.findAccountByAccountNumber(accountNumber);
+
 			System.out.println(accounts);
-			System.out.println(pass);
+
 			if (accounts.size() == 1) {
 				Account toCheck = accounts.get(0); // this.accountRepo.findAccountByAccountNumber(accountNumber);
+
 				System.out.println(toCheck);
 				System.out.println(toCheck.getPass());
 				System.out.println("answer = " + pass.get("pass").contentEquals(toCheck.getPass()));
+
 				if (pass.get("pass").equals(toCheck.getPass())) {
+
 					System.out.println("pass checked");
+
 					return this.mapToDTO(toCheck);
 				} else {
 					throw new RuntimeException();

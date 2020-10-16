@@ -8,15 +8,7 @@ public class PaymentDTO {
 
 	private Long userId;
 
-	public Long getRecipientId() {
-		return recipientId;
-	}
-
-	public void setRecipientId(Long recipientId) {
-		this.recipientId = recipientId;
-	}
-
-	private Long recipientId;
+	private int recipientId;
 
 	public Long getUserId() {
 		return userId;
@@ -30,7 +22,15 @@ public class PaymentDTO {
 
 	}
 
-	public PaymentDTO(Long paymentId, Long amount, Long userId, Long recipientId) {
+	public int getRecipientId() {
+		return recipientId;
+	}
+
+	public void setRecipientId(int recipientId) {
+		this.recipientId = recipientId;
+	}
+
+	public PaymentDTO(Long paymentId, Long amount, Long userId, int recipientId) {
 		super();
 		this.paymentId = paymentId;
 		this.amount = amount;
