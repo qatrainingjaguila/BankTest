@@ -111,7 +111,7 @@ Juan Carlos Aguila
 
 [erd1]: https://i.imgur.com/bHa7pFw.png
 [riskassessment]: https://i.imgur.com/p4ZAufX.png
-[coverage]: https://i.imgur.com/fvW18vg.png
+[coverage]: https://i.imgur.com/gWyRPfI.png
 [trello]: https://i.imgur.com/eNVwpFG.png
 [homeloggedout]: https://i.imgur.com/Ol4O1wG.png
 [signup]: https://i.imgur.com/XyGMkmg.png
